@@ -15,7 +15,7 @@ class Event(EventBase, table=True):
     """
     Modello di evento che estende EventBase e rappresenta una tabella nel database.
     """
-    id: int = Field(default=None, primary_key=True) # Campo ID che funge da chiave primaria, con valore predefinito None e marcato come chiave primaria
+    id: int = Field(default=None, primary_key=True) # Campo ID che funge da chiave primaria, con valore predefinito None 
 
 class EventCreate(EventBase): # Modello per la creazione di un nuovo evento
     """
