@@ -1,6 +1,7 @@
-from sqlmodel import SQLModel, Field
-from typing import Annotated
+from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
+from datetime import datetime
+from app.models.registration import Registration
 
 class EventBase(SQLModel):
     """
@@ -15,7 +16,14 @@ class Event(EventBase, table=True):
     """
     Modello di evento che estende EventBase e rappresenta una tabella nel database.
     """
-    id: int = Field(default=None, primary_key=True) # Campo ID che funge da chiave primaria, con valore predefinito None 
+    id: int = Field(default=None, primary_key=True) # Campo ID che funge da chiave primaria, con valore predefinito None
+    registrations: list["Registration"] = Relationship(
+        back_populates="event",
+        sa_relationship_kwargs=
+        {
+            "cascade": "all,delete,delete-orphan"
+        }
+    )
 
 class EventCreate(EventBase): # Modello per la creazione di un nuovo evento
     """
