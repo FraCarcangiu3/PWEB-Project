@@ -81,9 +81,14 @@ def delete_all_events(session: SessionDep):
     """
     Elimina tutti gli eventi.
     """
-    statement = delete(Event)
-    session.exec(statement)
-    session.commit()
+    # statement = delete(Event) # Non funziona il cascading delete.
+    # siccome singolarmente funziona, allora lo faccio uno per uno.
+    statement = select(Event) # Seleziona tutti gli eventi
+    events = session.exec(statement).all() # Esegui la query per ottenere tutti gli eventi in una lista
+    for event in events: # per ogni evento nella lista
+        session.delete(event) # Elimina l'evento dalla sessione
+    # session.exec(statement)
+    session.commit() # Commit le modifiche al database
     return {"detail": "Tutti gli eventi sono stati eliminati"}
 
 @router.delete("/{id}")

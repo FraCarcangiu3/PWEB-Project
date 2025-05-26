@@ -49,7 +49,6 @@ def add_user(
     session.commit()
     return "User aggiunto con successo."
 
-
 @router.delete("/")
 def delete_all_users(
     session: SessionDep
@@ -57,9 +56,14 @@ def delete_all_users(
     """
     Cancella tutti gli utenti.
     """
-    statement = delete(User)
-    session.exec(statement)
-    session.commit()
+    # statement = delete(User) # Non funziona il cascading delete.
+    # siccome singolarmente funziona, allora lo faccio uno per uno.
+    statement = select(User) # Seleziona tutti gli utenti
+    users = session.exec(statement).all() # Recupera tutti gli utenti
+    for user in users: # Itera su ogni utente
+        session.delete(user) # Elimina l'utente corrente
+    # session.exec(statement)
+    session.commit() # Commit delle modifiche
     return "Tutti gli utenti sono stati cancellati."
 
 @router.delete("/{username}")
