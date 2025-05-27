@@ -1,4 +1,5 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+from app.models.registration import Registration
 
 class BaseUser(SQLModel):
     """
@@ -13,6 +14,13 @@ class User(BaseUser, table=True):
     Modello di utente che estende BaseUser e rappresenta una tabella nel database.
     """
     username: str = Field(primary_key=True)
+    registrations: list["Registration"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs=
+        {
+            "cascade": "all, delete-orphan"
+        }
+    )
 
 class UserPublic(BaseUser):
     """
